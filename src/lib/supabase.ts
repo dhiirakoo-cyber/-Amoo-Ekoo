@@ -5,5 +5,15 @@ export const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ
 
 export const isSupabaseConfigured = true;
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Explicitly binding exactly to the window's native fetch to avoid proxy or environment issues
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: true,
+  },
+  global: {
+    fetch: (...args) => fetch(...args),
+  },
+});
 
