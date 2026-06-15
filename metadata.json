@@ -1,0 +1,6 @@
+{
+  "name": "Amoo Academy",
+  "description": "Global EdTech platform Amoo Academy frontend and state management.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
