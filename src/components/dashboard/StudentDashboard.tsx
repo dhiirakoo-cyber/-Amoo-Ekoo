@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { useUiStore } from '../../store/uiStore';
 import { useAuthStore } from '../../store/authStore';
-import { supabase } from '../../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../../lib/supabase';
 import { COURSES } from '../../data/courses';
 import { BookOpen, Compass, GraduationCap, LayoutGrid, LogOut, Settings, User, Loader2 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -17,8 +17,8 @@ export function StudentDashboard() {
   useEffect(() => {
     let isMounted = true;
     const fetchEnrollments = async () => {
-      if (!session) {
-        setIsLoading(false);
+      if (!session || !isSupabaseConfigured) {
+        if (isMounted) setIsLoading(false);
         return;
       }
       

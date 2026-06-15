@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { supabase } from '../../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../../lib/supabase';
 import { Eye, EyeOff, Loader2, Mail, Lock, User } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { Link, useNavigate } from 'react-router-dom';
@@ -21,6 +21,12 @@ export function RegisterForm() {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
+
+    if (!isSupabaseConfigured) {
+      setError('Database connection is not configured. Please add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY secrets.');
+      setIsLoading(false);
+      return;
+    }
 
     if (!fullName || !email || !password || !confirmPassword) {
       setError('Please fill in all fields');

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { supabase } from '../../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../../lib/supabase';
 import { useAuthStore } from '../../store/authStore';
 import { Eye, EyeOff, Loader2, Mail, Lock } from 'lucide-react';
 import { cn } from '../../lib/utils';
@@ -17,6 +17,12 @@ export function LoginForm() {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
+
+    if (!isSupabaseConfigured) {
+      setError('Database connection is not configured. Please add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY secrets.');
+      setIsLoading(false);
+      return;
+    }
 
     if (!email || !password) {
       setError('Please fill in all fields');
@@ -41,6 +47,11 @@ export function LoginForm() {
   };
 
   const handleGoogleLogin = async () => {
+    if (!isSupabaseConfigured) {
+      setError('Database connection is not configured. Please add your Supabase credentials.');
+      return;
+    }
+    
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',

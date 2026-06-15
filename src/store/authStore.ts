@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { supabase } from '../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { User, Session } from '@supabase/supabase-js';
 
 export type UserRole = 'student' | 'instructor' | 'admin';
@@ -27,6 +27,11 @@ export const useAuthStore = create<AuthState>((set) => ({
   isLoading: true,
 
   initialize: async () => {
+    if (!isSupabaseConfigured) {
+      set({ user: null, session: null, profile: null, isLoading: false });
+      return;
+    }
+
     try {
       const { data: { session }, error: sessionError } = await supabase.auth.getSession();
       

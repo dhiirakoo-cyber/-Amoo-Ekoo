@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'motion/react';
 import { useUiStore } from '../../store/uiStore';
 import { useAuthStore } from '../../store/authStore';
-import { supabase } from '../../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../../lib/supabase';
 import { Star, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { COURSES } from '../../data/courses';
@@ -18,6 +18,11 @@ export function FeaturedCourses() {
   const handleEnroll = async (courseId: string) => {
     if (!session) {
       navigate('/login');
+      return;
+    }
+
+    if (!isSupabaseConfigured) {
+      alert(language === 'en' ? 'Database connection missing. Please configure Supabase in your secrets.' : 'Daataabeesiin hin jiru. Maaloo sirreessi.');
       return;
     }
 
