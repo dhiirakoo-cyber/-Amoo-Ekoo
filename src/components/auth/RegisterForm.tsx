@@ -55,9 +55,9 @@ export function RegisterForm() {
 
       if (authError) throw authError;
 
-      // Create profile record if NOT created by triggers, though Supabase triggers are better for this.
-      // But we will ensure the app shows success.
-      if (data.user) {
+      if (data.session) {
+        navigate('/dashboard');
+      } else if (data.user) {
         setSuccess(true);
       }
     } catch (err: any) {

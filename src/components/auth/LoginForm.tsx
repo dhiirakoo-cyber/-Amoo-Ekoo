@@ -3,9 +3,10 @@ import { supabase } from '../../lib/supabase';
 import { useAuthStore } from '../../store/authStore';
 import { Eye, EyeOff, Loader2, Mail, Lock } from 'lucide-react';
 import { cn } from '../../lib/utils';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export function LoginForm() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -31,7 +32,7 @@ export function LoginForm() {
 
       if (authError) throw authError;
       
-      // Zustand store listener will automatically update the session
+      navigate('/dashboard');
     } catch (err: any) {
       setError(err.message || 'Failed to sign in. Please check your credentials.');
     } finally {
@@ -44,7 +45,7 @@ export function LoginForm() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/`,
+          redirectTo: `${window.location.origin}/dashboard`,
         },
       });
       if (error) throw error;

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useTheme } from '../common/Providers';
 import { useUiStore } from '../../store/uiStore';
+import { useAuthStore } from '../../store/authStore';
 import { Moon, Sun, Globe } from 'lucide-react';
 import { motion } from 'motion/react';
 
@@ -43,12 +44,20 @@ export function Navbar() {
             {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
           </button>
           <div className="hidden sm:flex items-center gap-3 border-l border-zinc-200 dark:border-zinc-800 pl-4 ml-2">
-            <Link to="/login" className="text-sm font-semibold text-zinc-600 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white transition-colors">
-              {language === 'en' ? 'Sign In' : 'Seeni'}
-            </Link>
-            <Link to="/register" className="text-sm font-semibold px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all shadow-sm active:scale-95">
-              {language === 'en' ? 'Register' : 'Galmoofadhu'}
-            </Link>
+            {!useAuthStore((state) => state.session) ? (
+              <>
+                <Link to="/login" className="text-sm font-semibold text-zinc-600 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white transition-colors">
+                  {language === 'en' ? 'Sign In' : 'Seeni'}
+                </Link>
+                <Link to="/register" className="text-sm font-semibold px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all shadow-sm active:scale-95">
+                  {language === 'en' ? 'Register' : 'Galmoofadhu'}
+                </Link>
+              </>
+            ) : (
+              <Link to="/dashboard" className="text-sm font-semibold px-4 py-2 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-lg transition-all shadow-sm active:scale-95">
+                {language === 'en' ? 'Dashboard' : 'Daashboordii'}
+              </Link>
+            )}
           </div>
         </div>
       </div>

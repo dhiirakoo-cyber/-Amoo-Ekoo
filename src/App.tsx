@@ -10,6 +10,7 @@ import { ProtectedRoute } from './components/common/ProtectedRoute';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { HomePage } from './components/home/HomePage';
+import { StudentDashboard } from './components/dashboard/StudentDashboard';
 
 function Layout() {
   return (
@@ -25,7 +26,6 @@ function Layout() {
 
 const AdminDashboard = () => <div className="p-12">Admin Dashboard (Protected)</div>;
 const InstructorDashboard = () => <div className="p-12">Instructor Dashboard (Protected)</div>;
-const StudentDashboard = () => <div className="p-12">Student Dashboard (Protected)</div>;
 
 export default function App() {
   return (
@@ -48,7 +48,7 @@ export default function App() {
                 <InstructorDashboard />
               </ProtectedRoute>
             } />
-            <Route path="/student/*" element={
+            <Route path="/dashboard/*" element={
               <ProtectedRoute allowedRoles={['admin', 'instructor', 'student']}>
                 <StudentDashboard />
               </ProtectedRoute>
