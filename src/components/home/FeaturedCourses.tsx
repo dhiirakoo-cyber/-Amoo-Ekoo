@@ -1,47 +1,46 @@
+import { useState } from 'react';
 import { motion } from 'motion/react';
 import { useUiStore } from '../../store/uiStore';
-import { Image as ImageIcon, Video, PenTool, Star } from 'lucide-react';
+import { useAuthStore } from '../../store/authStore';
+import { supabase } from '../../lib/supabase';
+import { Star, Loader2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { COURSES } from '../../data/courses';
 
 export function FeaturedCourses() {
   const { language } = useUiStore();
+  const { session } = useAuthStore();
+  const navigate = useNavigate();
+  const [enrollingMap, setEnrollingMap] = useState<Record<string, boolean>>({});
 
   const currentPrice = language === 'en' ? '200 Birr' : '200 Birrii';
 
-  const courses = [
-    {
-      id: 'photo-editing',
-      title: language === 'en' ? 'Mastering Photo Editing' : 'Gulaallii Suuraa Ogummaan',
-      description: language === 'en' 
-        ? 'Learn advanced color grading, retouching, and composition using modern digital tools.'
-        : 'Meeshaalee dijitaalaa ammayyaa fayyadamuun halluu sadarkaa olaanaa mijeessuu fi qindeessuu baradhaa.',
-      icon: ImageIcon,
-      color: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
-      rating: 4.9,
-      students: 1240,
-    },
-    {
-      id: 'graphic-design',
-      title: language === 'en' ? 'Professional Graphic Design' : 'Giraafik Diizaayinii Ogeessaa',
-      description: language === 'en' 
-        ? 'From core design principles to creating stunning brand identities and UI elements.'
-        : 'Qajeeltoowwan diizaayinii bu\'uuraa irraa eegalee mallattoo tuuta cimina qabu fi elementoota UI uumuu.',
-      icon: PenTool,
-      color: 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
-      rating: 4.8,
-      students: 2100,
-    },
-    {
-      id: 'video-editing',
-      title: language === 'en' ? 'Cinematic Video Editing' : 'Gulaallii Viidiyoo Siinimaa',
-      description: language === 'en' 
-        ? 'Craft compelling narratives through professional cutting, transitions, and audio mixing.'
-        : 'Kutaa ogeessaa, ce\'umsaa fi sagalee walmakuudhaan seenaa hawwataa uumuu baradhaa.',
-      icon: Video,
-      color: 'bg-purple-500/10 text-purple-600 dark:text-purple-400',
-      rating: 5.0,
-      students: 890,
+  const handleEnroll = async (courseId: string) => {
+    if (!session) {
+      navigate('/login');
+      return;
     }
-  ];
+
+    try {
+      setEnrollingMap(prev => ({ ...prev, [courseId]: true }));
+      
+      const { error } = await supabase.from('enrollments').insert({
+        user_id: session.user.id,
+        course_id: courseId
+      });
+
+      if (error && error.code !== '23505') { // Ignore unique constraint if already enrolled
+        throw error;
+      }
+
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Enrollment error:', error);
+      alert(language === 'en' ? 'Failed to enroll. Please try again.' : 'Galmoofachuu hin dandeenye. Irra deebi\'aa yaalaa.');
+    } finally {
+      setEnrollingMap(prev => ({ ...prev, [courseId]: false }));
+    }
+  };
 
   return (
     <section className="py-20">
@@ -58,8 +57,10 @@ export function FeaturedCourses() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {courses.map((course, index) => {
+          {COURSES.map((course, index) => {
             const Icon = course.icon;
+            const isEnrolling = enrollingMap[course.id];
+            
             return (
               <motion.div
                 key={course.id}
@@ -74,10 +75,10 @@ export function FeaturedCourses() {
                     <Icon className="w-7 h-7" />
                   </div>
                   <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                    {course.title}
+                    {language === 'en' ? course.titleEn : course.titleOm}
                   </h3>
                   <p className="text-zinc-600 dark:text-zinc-400 mb-6 line-clamp-3">
-                    {course.description}
+                    {language === 'en' ? course.descriptionEn : course.descriptionOm}
                   </p>
                   
                   <div className="flex items-center gap-4 text-sm text-zinc-500 dark:text-zinc-400">
@@ -99,8 +100,16 @@ export function FeaturedCourses() {
                        {currentPrice}
                      </p>
                   </div>
-                  <button className="px-5 py-2.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-lg font-semibold hover:bg-blue-600 dark:hover:bg-blue-500 hover:text-white dark:hover:text-white transition-colors">
-                    {language === 'en' ? 'Enroll' : 'Galmooftu'}
+                  <button 
+                    onClick={() => handleEnroll(course.id)}
+                    disabled={isEnrolling}
+                    className="flex items-center justify-center min-w-[100px] px-5 py-2.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-lg font-semibold hover:bg-blue-600 dark:hover:bg-blue-500 hover:text-white dark:hover:text-white transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+                  >
+                    {isEnrolling ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : (
+                      language === 'en' ? 'Enroll' : 'Galmooftu'
+                    )}
                   </button>
                 </div>
               </motion.div>
