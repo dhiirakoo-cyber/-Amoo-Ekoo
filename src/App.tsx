@@ -14,7 +14,7 @@ import { StudentDashboard } from './components/dashboard/StudentDashboard';
 
 function Layout() {
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 transition-colors duration-300 font-sans flex flex-col">
+    <div className="min-h-screen bg-slate-950 text-slate-100 transition-colors duration-300 font-sans flex flex-col overflow-x-hidden">
       <Navbar />
       <main className="flex-1 w-full">
         <Outlet />

@@ -14,7 +14,7 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-zinc-50 dark:bg-zinc-950">
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-zinc-950">
         <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
       </div>
     );
@@ -25,13 +25,11 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
   }
 
   if (allowedRoles && allowedRoles.length > 0) {
-    // If profile hasn't loaded yet, show loading
+    // If profile hasn't loaded yet and we are still initializing, show loading
+    // But we already checked isLoading above, so if we reach here and profile is null,
+    // they don't have a role to satisfy the allowedRoles requirement.
     if (!profile) {
-      return (
-        <div className="min-h-screen flex items-center justify-center bg-zinc-50 dark:bg-zinc-950">
-          <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
-        </div>
-      );
+      return <Navigate to="/" replace />; // or to a setup-profile page
     }
     
     if (!allowedRoles.includes(profile.role)) {

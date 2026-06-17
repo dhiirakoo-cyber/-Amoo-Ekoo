@@ -6,7 +6,7 @@ import {defineConfig} from 'vite';
 export default defineConfig(() => {
   return {
     define: {
-      'import.meta.env.VITE_SUPABASE_URL': JSON.stringify(process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || ''),
+      'import.meta.env.VITE_SUPABASE_URL': JSON.stringify((process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || '').replace('gdx', 'hdx')),
       'import.meta.env.VITE_SUPABASE_ANON_KEY': JSON.stringify(process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || ''),
     },
     plugins: [react(), tailwindcss()],
@@ -21,6 +21,14 @@ export default defineConfig(() => {
       hmr: process.env.DISABLE_HMR !== 'true',
       // Disable file watching when DISABLE_HMR is true to save CPU during agent edits.
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
+      proxy: {
+        '/proxy-supabase': {
+          target: (process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || 'https://hesjpceomicbhwbvqhdx.supabase.co').replace('gdx', 'hdx'),
+          changeOrigin: true,
+          secure: false,
+          rewrite: (path) => path.replace(/^\/proxy-supabase/, '')
+        }
+      }
     },
   };
 });

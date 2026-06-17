@@ -1,4 +1,4 @@
-import { Image as ImageIcon, Video, PenTool } from 'lucide-react';
+import { Image as ImageIcon, Video, PenTool, Sparkles } from 'lucide-react';
 
 export const COURSES = [
   {
@@ -11,6 +11,7 @@ export const COURSES = [
     color: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
     rating: 4.9,
     students: 1240,
+    imageUrl: 'https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=2070&auto=format&fit=crop',
   },
   {
     id: 'graphic-design',
@@ -22,16 +23,30 @@ export const COURSES = [
     color: 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
     rating: 4.8,
     students: 2100,
+    imageUrl: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=2000&auto=format&fit=crop',
   },
   {
     id: 'video-editing',
-    titleEn: 'Cinematic Video Editing',
-    titleOm: 'Gulaallii Viidiyoo Siinimaa',
+    titleEn: 'Video Editing',
+    titleOm: 'Gulaallii Viidiyoo',
     descriptionEn: 'Craft compelling narratives through professional cutting, transitions, and audio mixing.',
     descriptionOm: 'Kutaa ogeessaa, ce\'umsaa fi sagalee walmakuudhaan seenaa hawwataa uumuu baradhaa.',
     icon: Video,
     color: 'bg-purple-500/10 text-purple-600 dark:text-purple-400',
     rating: 5.0,
     students: 890,
+    imageUrl: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?q=80&w=2070&auto=format&fit=crop',
+  },
+  {
+    id: 'prompt-engineering',
+    titleEn: 'Mastering Prompt Engineering & AI',
+    titleOm: 'Injinariingii Piroompitiifi AI Ogummaan',
+    descriptionEn: 'Learn how to effectively communicate with AI models to automate workflows and accelerate creative processes.',
+    descriptionOm: 'Hoojiiwwan ofumaan hojjechiisuufi mala uumuu saffisiisuuf moodeloota AI waliin haala bu\'a qabeessa ta\'een walqunnamuu baradhaa.',
+    icon: Sparkles,
+    color: 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
+    rating: 4.9,
+    students: 3450,
+    imageUrl: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=2000&auto=format&fit=crop',
   }
 ];

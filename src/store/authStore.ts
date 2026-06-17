@@ -53,10 +53,20 @@ export const useAuthStore = create<AuthState>((set) => ({
         console.error('Error fetching profile:', profileError.message);
       }
 
+      let userProfile = profile as UserProfile | null;
+      if (!userProfile && session?.user) {
+        userProfile = {
+          id: session.user.id,
+          role: 'student',
+          full_name: session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'Student',
+          avatar_url: null,
+        };
+      }
+
       set({
         user: session.user,
         session,
-        profile: profile as UserProfile | null,
+        profile: userProfile,
         isLoading: false,
       });
 
@@ -71,10 +81,20 @@ export const useAuthStore = create<AuthState>((set) => ({
             .eq('id', newSession.user.id)
             .single();
 
+          let userProfile = newProfile as UserProfile | null;
+          if (!userProfile && newSession.user) {
+            userProfile = {
+              id: newSession.user.id,
+              role: 'student',
+              full_name: newSession.user.user_metadata?.full_name || newSession.user.email?.split('@')[0] || 'Student',
+              avatar_url: null,
+            };
+          }
+
           set({
             user: newSession.user,
             session: newSession,
-            profile: newProfile as UserProfile | null,
+            profile: userProfile,
           });
         }
       });
