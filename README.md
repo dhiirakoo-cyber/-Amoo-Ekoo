@@ -1,17 +1,20 @@
-# Amoo Academy
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
+</div>
 
-Amoo Academy is an EdTech platform dedicated to providing high-quality vocational training for students and creative professionals.
+# Run and deploy your AI Studio app
 
-## Our Courses
-We specialize in providing expert-led training in the following fields:
-* Photo Editing
-* Graphic Design
-* Video Editing
+This contains everything you need to run your app locally.
 
-## Pricing
-We are committed to affordable education. All our digital products, including courses and ebooks, are offered at a flat rate:
-* Price: 200 Birrii
+View your app in AI Studio: https://ai.studio/apps/85604514-0fb7-4c1e-bf66-8a119d3d9665
 
----
-*Transform your skills with Amoo Academy.*
+## Run Locally
 
+**Prerequisites:**  Node.js
+
+
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`
